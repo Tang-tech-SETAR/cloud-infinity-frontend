@@ -10,12 +10,13 @@ h1 {
 }
 
 .form-container {
-  margin-bottom: 30px;
   display: flex;
+  flex-direction: column;
+  max-width: 300px;
   gap: 10px;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
+  margin-bottom: 30px;
+}
+
 }
 
 input[type="text"],
@@ -68,3 +69,4 @@ button {
   border-radius: 6px;
   margin-top: 12px;
 }
+
