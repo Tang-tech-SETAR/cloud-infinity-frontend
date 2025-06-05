@@ -93,6 +93,10 @@ function App() {
           <h2>{device.name}</h2>
           <p><strong>IP:</strong> {device.ip}</p>
           <p><strong>Signal:</strong> {device.signal}%</p>
+<div className="signal-bar">
+  <div className="signal-fill" style={{ width: `${device.signal}%` }}></div>
+</div>
+
           <p><strong>Alarm:</strong> {device.alarm ? '🚨 Triggered' : '✅ None'}</p>
           <p><strong>Uptime:</strong> {device.uptime}</p>
           <p><strong>Temperature:</strong> {device.temperature}</p>
@@ -104,3 +108,14 @@ function App() {
 }
 
 export default App;
+<div className="main-layout">
+  <form className="form"> {/* your form code */} </form>
+
+  <div>
+    {devices.map(device => (
+      <div key={device.id} className="device-card">
+        {/* device info */}
+      </div>
+    ))}
+  </div>
+</div>
