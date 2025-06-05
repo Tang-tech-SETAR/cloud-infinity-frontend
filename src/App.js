@@ -1,3 +1,5 @@
+import './App.css';
+
 import React, { useState, useEffect } from 'react';
 
 function App() {
@@ -63,7 +65,8 @@ function App() {
   };
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div className="container">
+
       <h1>Coiler Booster Devices</h1>
 
       {/* Add Device Form */}
