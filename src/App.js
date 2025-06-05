@@ -67,7 +67,8 @@ function App() {
       <h1>Coiler Booster Devices</h1>
 
       {/* Add Device Form */}
-      <div style={{ marginBottom: '20px', border: '1px solid #ccc', padding: '10px' }}>
+      <div className="form-container">
+
         <h2>Add New Device</h2>
         <input name="name" placeholder="Name" value={newDevice.name} onChange={handleInputChange} /> <br />
         <input name="ip" placeholder="IP" value={newDevice.ip} onChange={handleInputChange} /> <br />
@@ -84,7 +85,8 @@ function App() {
 
       {/* Device List */}
       {devices.map(device => (
-        <div key={device.id} style={{ marginBottom: '20px', border: '1px solid #ccc', padding: '10px' }}>
+        <div key={device.id} className="device-card">
+
           <h2>{device.name}</h2>
           <p><strong>IP:</strong> {device.ip}</p>
           <p><strong>Signal:</strong> {device.signal}%</p>
