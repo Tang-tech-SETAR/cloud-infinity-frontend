@@ -1,5 +1,4 @@
 import './App.css';
-
 import React, { useState, useEffect } from 'react';
 
 function App() {
@@ -48,13 +47,9 @@ function App() {
   };
 
   const addDevice = () => {
-  const deleteDevice = (id) => {
-    setDevices(prev => prev.filter(device => device.id !== id));
-  };
-
     const device = {
       ...newDevice,
-      id: devices.length + 1
+      id: Date.now()
     };
     setDevices(prev => [...prev, device]);
     setNewDevice({
@@ -68,49 +63,50 @@ function App() {
     });
   };
 
+  const deleteDevice = (id) => {
+    setDevices(prev => prev.filter(device => device.id !== id));
+  };
+
   return (
     <div className="container">
-
       <h1>Coiler Repeaters Devices</h1>
 
-      {/* Add Device Form */}
-      <div className="form-container">
-
-        <h2>Add New Device</h2>
-        <input name="name" placeholder="Name" value={newDevice.name} onChange={handleInputChange} /> <br />
-        <input name="ip" placeholder="IP" value={newDevice.ip} onChange={handleInputChange} /> <br />
-        <input name="signal" placeholder="Signal" value={newDevice.signal} onChange={handleInputChange} /> <br />
-        <label>
-          Alarm:
-          <input type="checkbox" name="alarm" checked={newDevice.alarm} onChange={handleInputChange} />
-        </label><br />
-        <input name="uptime" placeholder="Uptime" value={newDevice.uptime} onChange={handleInputChange} /> <br />
-        <input name="temperature" placeholder="Temperature" value={newDevice.temperature} onChange={handleInputChange} /> <br />
-        <input name="last_seen" placeholder="Last Seen" value={newDevice.last_seen} onChange={handleInputChange} /> <br />
-        <button onClick={addDevice}>Add Device</button>
-      </div>
-
-      {/* Device List */}
-      {devices.map(device => (
-        <div key={device.id} className="device-card">
-
-          <h2>{device.name}</h2>
-          <p><strong>IP:</strong> {device.ip}</p>
-          <p><strong>Signal:</strong> {device.signal}%</p>
-<div className="signal-bar">
-  <div className="signal-fill" style={{ width: `${device.signal}%` }}></div>
-</div>
-
-          <p><strong>Alarm:</strong> {device.alarm ? '🚨 Triggered' : '✅ None'}</p>
-          <p><strong>Uptime:</strong> {device.uptime}</p>
-          <p><strong>Temperature:</strong> {device.temperature}</p>
-                <button onClick={() => deleteDevice(device.id)} className="delete-button">
-            Delete Device
-          </button>
-    <p><strong>Last Seen:</strong> {device.last_seen}</p>
-
+      <div className="main-layout">
+        {/* Form Section */}
+        <div className="form-container">
+          <h2>Add New Device</h2>
+          <input name="name" placeholder="Name" value={newDevice.name} onChange={handleInputChange} />
+          <input name="ip" placeholder="IP" value={newDevice.ip} onChange={handleInputChange} />
+          <input name="signal" placeholder="Signal" value={newDevice.signal} onChange={handleInputChange} />
+          <label>
+            Alarm:
+            <input type="checkbox" name="alarm" checked={newDevice.alarm} onChange={handleInputChange} />
+          </label>
+          <input name="uptime" placeholder="Uptime" value={newDevice.uptime} onChange={handleInputChange} />
+          <input name="temperature" placeholder="Temperature" value={newDevice.temperature} onChange={handleInputChange} />
+          <input name="last_seen" placeholder="Last Seen" value={newDevice.last_seen} onChange={handleInputChange} />
+          <button onClick={addDevice}>Add Device</button>
         </div>
-      ))}
+
+        {/* Device List Section */}
+        <div className="device-list">
+          {devices.map(device => (
+            <div key={device.id} className="device-card">
+              <h2>{device.name}</h2>
+              <p><strong>IP:</strong> {device.ip}</p>
+              <p><strong>Signal:</strong> {device.signal}%</p>
+              <div className="signal-bar">
+                <div className="signal-fill" style={{ width: `${device.signal}%` }}></div>
+              </div>
+              <p><strong>Alarm:</strong> {device.alarm ? '🚨 Triggered' : '✅ None'}</p>
+              <p><strong>Uptime:</strong> {device.uptime}</p>
+              <p><strong>Temperature:</strong> {device.temperature}</p>
+              <p><strong>Last Seen:</strong> {device.last_seen}</p>
+              <button onClick={() => deleteDevice(device.id)} className="delete-button">Delete Device</button>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
