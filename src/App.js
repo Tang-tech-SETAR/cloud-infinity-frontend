@@ -108,14 +108,3 @@ function App() {
 }
 
 export default App;
-<div className="main-layout">
-  <form className="form"> {/* your form code */} </form>
-
-  <div>
-    {devices.map(device => (
-      <div key={device.id} className="device-card">
-        {/* device info */}
-      </div>
-    ))}
-  </div>
-</div>
