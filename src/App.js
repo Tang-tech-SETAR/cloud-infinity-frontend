@@ -20,3 +20,4 @@
 
   <button onClick={() => deleteDevice(device.id)} className="delete-button">Delete Device</button>
 </div>
+export default App;
