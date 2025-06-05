@@ -2,7 +2,7 @@
   "name": "cloud-infinity-frontend",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://tang-tech-setar.github.io/cloud-infinity-frontend",
+  "homepage": "https://cloud-infinity-frontend.onrender.com",
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
