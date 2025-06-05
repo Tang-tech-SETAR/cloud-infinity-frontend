@@ -48,6 +48,10 @@ function App() {
   };
 
   const addDevice = () => {
+  const deleteDevice = (id) => {
+    setDevices(prev => prev.filter(device => device.id !== id));
+  };
+
     const device = {
       ...newDevice,
       id: devices.length + 1
@@ -100,7 +104,11 @@ function App() {
           <p><strong>Alarm:</strong> {device.alarm ? '🚨 Triggered' : '✅ None'}</p>
           <p><strong>Uptime:</strong> {device.uptime}</p>
           <p><strong>Temperature:</strong> {device.temperature}</p>
-          <p><strong>Last Seen:</strong> {device.last_seen}</p>
+                <button onClick={() => deleteDevice(device.id)} className="delete-button">
+            Delete Device
+          </button>
+    <p><strong>Last Seen:</strong> {device.last_seen}</p>
+
         </div>
       ))}
     </div>
