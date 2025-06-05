@@ -93,15 +93,21 @@ function App() {
           {devices.map(device => (
             <div key={device.id} className="device-card">
               <h2>{device.name}</h2>
-              <p><strong>IP:</strong> {device.ip}</p>
-              <p><strong>Signal:</strong> {device.signal}%</p>
-              <div className="signal-bar">
-                <div className="signal-fill" style={{ width: `${device.signal}%` }}></div>
-              </div>
-              <p><strong>Alarm:</strong> {device.alarm ? '🚨 Triggered' : '✅ None'}</p>
-              <p><strong>Uptime:</strong> {device.uptime}</p>
-              <p><strong>Temperature:</strong> {device.temperature}</p>
-              <p><strong>Last Seen:</strong> {device.last_seen}</p>
+              <div className="tab"><strong>IP:</strong> {device.ip}</div>
+
+<div className="tab">
+  <strong>Signal:</strong> {device.signal}%
+  <div className="signal-bar">
+    <div className="signal-fill" style={{ width: `${device.signal}%` }}></div>
+  </div>
+</div>
+
+<div className="tab"><strong>Alarm:</strong> {device.alarm ? '🚨 Triggered' : '✅ None'}</div>
+<div className="tab"><strong>Uptime:</strong> {device.uptime}</div>
+<div className="tab"><strong>Temperature:</strong> {device.temperature}</div>
+<div className="tab"><strong>Last Seen:</strong> {device.last_seen}</div>
+
+              
               <button onClick={() => deleteDevice(device.id)} className="delete-button">Delete Device</button>
             </div>
           ))}
