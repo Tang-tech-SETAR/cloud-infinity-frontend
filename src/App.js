@@ -18,7 +18,7 @@ function App() {
     setDevices([
       {
         id: 1,
-        name: "Booster A",
+        name: "Repeater A",
         ip: "192.168.1.100",
         signal: 70,
         alarm: false,
@@ -28,7 +28,7 @@ function App() {
       },
       {
         id: 2,
-        name: "Booster B",
+        name: "Repeater B",
         ip: "192.168.1.101",
         signal: 55,
         alarm: true,
@@ -67,7 +67,7 @@ function App() {
   return (
     <div className="container">
 
-      <h1>Coiler Booster Devices</h1>
+      <h1>Coiler Repeaters Devices</h1>
 
       {/* Add Device Form */}
       <div className="form-container">
