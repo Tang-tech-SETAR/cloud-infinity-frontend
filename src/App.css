@@ -1,107 +1,150 @@
+/* General Layout */
 body {
-  margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+  background: #f7f7f7;
+  color: #000;
 }
 
+/* Dark mode */
+.dark-mode {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+.dark-mode .device-card {
+  background-color: #1e1e1e;
+  border: 1px solid #333;
+}
+
+.dark-mode input,
+.dark-mode button {
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  border: 1px solid #444;
+}
+
+.dark-mode .signal-bar {
+  background-color: #444;
+}
+
+.dark-mode .signal-fill {
+  background-color: #76ff03;
+}
+
+.dark-mode .delete-button {
+  background-color: #b00020;
+}
+
+.dark-mode .toggle-button {
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #888;
+}
+
+/* Containers */
 .container {
-  max-width: 1000px;
-  margin: 30px auto;
   padding: 20px;
-}
-
-h1 {
-  text-align: center;
-  color: #333;
+  max-width: 1100px;
+  margin: auto;
 }
 
 .form-container {
-  background: #fff;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  margin-bottom: 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  margin-bottom: 20px;
 }
 
 input[type="text"],
-input[type="number"],
 input[type="checkbox"],
-input[type="date"],
+input[type="number"],
+input[type="datetime-local"],
+input[type="email"],
 input,
 button {
-  padding: 8px;
-  font-size: 14px;
-  margin-bottom: 8px;
-  border-radius: 4px;
+  padding: 10px;
+  margin: 6px 4px;
+  border-radius: 5px;
   border: 1px solid #ccc;
 }
 
 button {
   cursor: pointer;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  margin-top: 5px;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
-.device-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
 }
 
 .device-card {
   background: #fff;
   padding: 20px;
+  margin-bottom: 20px;
   border-radius: 10px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-.repeater-line {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
-  font-size: 15px;
-  font-weight: 500;
-  margin-bottom: 8px;
-}
-
-.repeater-footer {
+.device-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 10px;
+  flex-wrap: wrap;
 }
 
+.device-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Signal bar */
 .signal-bar {
-  width: 100px;
   height: 10px;
-  background-color: #ddd;
+  background: #ccc;
   border-radius: 5px;
   overflow: hidden;
+  width: 150px;
 }
 
 .signal-fill {
   height: 100%;
-  background-color: #28a745;
+  background: #4caf50;
 }
 
+/* Indicator Row */
+.indicator-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* Buttons */
 .delete-button {
-  background-color: #dc3545;
-  padding: 6px 12px;
-  border: none;
+  background: #e53935;
   color: #fff;
+  border: none;
+  padding: 8px 12px;
   border-radius: 4px;
 }
 
-.delete-button:hover {
-  background-color: #b52b39;
+.edit-button {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-right: 8px;
+}
+
+.toggle-button {
+  background: #222;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .device-info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

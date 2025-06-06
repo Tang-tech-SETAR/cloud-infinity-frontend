@@ -15,12 +15,13 @@ function App() {
   });
   const [editingId, setEditingId] = useState(null);
   const [editData, setEditData] = useState({ name: '', ip: '' });
+  const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
     setDevices([
       {
         id: 1,
-        name: "A",
+        name: "Repeater 1",
         ip: "192.168.1.100",
         signal: 70,
         alarm: false,
@@ -30,7 +31,7 @@ function App() {
       },
       {
         id: 2,
-        name: "B",
+        name: "Repeater 2",
         ip: "192.168.1.101",
         signal: 55,
         alarm: true,
@@ -90,9 +91,12 @@ function App() {
   };
 
   return (
-    <div className="container">
-      <h1>Coiler Repeaters Devices</h1>
+    <div className={darkMode ? "dark-mode container" : "container"}>
+      <button className="toggle-button" onClick={() => setDarkMode(!darkMode)}>
+        Toggle Dark Mode
+      </button>
 
+      <h1>Coiler Repeaters Devices</h1>
       <div className="form-container">
         <h2>Add New Device</h2>
         <input name="name" placeholder="Name" value={newDevice.name} onChange={handleInputChange} />
@@ -113,39 +117,31 @@ function App() {
           <div key={device.id} className="device-card">
             {editingId === device.id ? (
               <>
-                <input
-                  name="name"
-                  value={editData.name}
-                  onChange={handleEditChange}
-                  placeholder="New Name"
-                />
-                <input
-                  name="ip"
-                  value={editData.ip}
-                  onChange={handleEditChange}
-                  placeholder="New IP"
-                />
+                <input name="name" value={editData.name} onChange={handleEditChange} />
+                <input name="ip" value={editData.ip} onChange={handleEditChange} />
                 <button onClick={() => saveEdit(device.id)}>Update</button>
                 <button onClick={() => setEditingId(null)}>Cancel</button>
               </>
             ) : (
               <>
-                <div className="repeater-line">
-                  <strong>Repeater {device.name}</strong>&nbsp;&nbsp;
-                  <strong>IP:</strong> {device.ip}&nbsp;&nbsp;
-                  <strong>Signal:</strong> {device.signal}%&nbsp;&nbsp;
-                  <div className="signal-bar">
-                    <div className="signal-fill" style={{ width: `${device.signal}%` }}></div>
+                <div className="device-header">
+                  <strong>{device.name}</strong>
+                  <div className="device-info">
+                    <span><strong>IP:</strong> {device.ip}</span>
+                    <span><strong>Signal:</strong> {device.signal}%</span>
+                    <div className="signal-bar">
+                      <div className="signal-fill" style={{ width: `${device.signal}%` }}></div>
+                    </div>
+                    <span><strong>Alarm:</strong> {device.alarm ? '🔔 Triggered' : '✅ None'}</span>
+                    <span><strong>Uptime:</strong> {device.uptime}</span>
+                    <span><strong>Temp:</strong> {device.temperature}</span>
                   </div>
-                  &nbsp;&nbsp;<strong>Alarm:</strong> {device.alarm ? '🚨 Triggered' : '✅ None'}
-                  &nbsp;&nbsp;<strong>Uptime:</strong> {device.uptime}
-                  &nbsp;&nbsp;<strong>Temp:</strong> {device.temperature}
                 </div>
-                <div className="repeater-footer">
+                <div className="indicator-row">
                   <strong>Last Seen:</strong> {device.last_seen}
-                  <button onClick={() => startEdit(device)}>Edit</button>
-                  <button onClick={() => deleteDevice(device.id)} className="delete-button">Delete</button>
                 </div>
+                <button className="edit-button" onClick={() => startEdit(device)}>Edit</button>
+                <button className="delete-button" onClick={() => deleteDevice(device.id)}>Delete</button>
               </>
             )}
           </div>
