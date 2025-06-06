@@ -1,13 +1,18 @@
-/* General Layout */
+/* === Base Styling === */
 body {
-  font-family: Arial, sans-serif;
   margin: 0;
-  padding: 0;
+  font-family: Arial, sans-serif;
   background: #f7f7f7;
   color: #000;
 }
 
-/* Dark mode */
+.container {
+  padding: 20px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+/* === Dark Mode === */
 .dark-mode {
   background-color: #121212;
   color: #e0e0e0;
@@ -43,108 +48,119 @@ body {
   border: 1px solid #888;
 }
 
-/* Containers */
-.container {
-  padding: 20px;
-  max-width: 1100px;
-  margin: auto;
-}
-
-.form-container {
-  margin-bottom: 20px;
-}
-
-input[type="text"],
-input[type="checkbox"],
-input[type="number"],
-input[type="datetime-local"],
-input[type="email"],
-input,
-button {
+/* === Form Section === */
+.form-container input,
+.form-container button {
   padding: 10px;
   margin: 6px 4px;
   border-radius: 5px;
   border: 1px solid #ccc;
 }
 
-button {
+.form-container button {
+  background: #007bff;
+  color: white;
+  border: none;
   cursor: pointer;
+}
+
+.form-container button:hover {
+  background: #0056b3;
+}
+
+/* === Search Box === */
+.search-container {
+  margin: 20px 0;
+}
+
+.search-input {
+  padding: 10px;
+  width: 100%;
+  max-width: 300px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* === Device Card === */
+.device-list {
+  margin-top: 20px;
 }
 
 .device-card {
   background: #fff;
+  border-radius: 10px;
   padding: 20px;
   margin-bottom: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .device-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 10px;
 }
 
-.device-info {
+.indicator-row {
   display: flex;
+  gap: 10px;
   align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
+  margin-bottom: 10px;
 }
 
-/* Signal bar */
+/* === Signal Bar === */
 .signal-bar {
+  width: 150px;
   height: 10px;
-  background: #ccc;
+  background-color: #ccc;
   border-radius: 5px;
   overflow: hidden;
-  width: 150px;
 }
 
 .signal-fill {
   height: 100%;
-  background: #4caf50;
+  background-color: #4caf50;
 }
 
-/* Indicator Row */
-.indicator-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-/* Buttons */
-.delete-button {
-  background: #e53935;
-  color: #fff;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 4px;
-}
-
+/* === Buttons === */
 .edit-button {
-  background: #1976d2;
+  background-color: #1976d2;
   color: #fff;
   border: none;
-  padding: 8px 12px;
+  padding: 6px 12px;
+  margin-right: 6px;
   border-radius: 4px;
-  margin-right: 8px;
+  cursor: pointer;
+}
+
+.delete-button {
+  background-color: #e53935;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .toggle-button {
-  background: #222;
-  color: #fff;
-  padding: 8px 12px;
-  border-radius: 4px;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
+  background: #333;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-/* Responsive */
+/* === Responsive === */
 @media (max-width: 600px) {
-  .device-info {
+  .device-header {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .signal-bar {
+    width: 100%;
   }
 }
