@@ -1,46 +1,122 @@
-
-.container {
-  padding: 20px;
-  font-family: sans-serif;
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f4f4f4;
 }
 
-.main-layout {
-  display: flex;
-  gap: 20px;
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
 }
 
 .form-container {
-  flex: 1;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.form-container h2 {
+  margin-bottom: 15px;
+}
+
+.form-container input[type="text"],
+.form-container input[type="number"],
+.form-container input[type="checkbox"],
+.form-container input {
+  display: block;
+  width: 100%;
   max-width: 300px;
+  margin-bottom: 10px;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.form-container label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 8px;
+}
+
+.form-container button {
+  padding: 10px 15px;
+  background: #007bff;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.form-container button:hover {
+  background: #0056b3;
 }
 
 .device-list {
-  flex: 2;
-}
-
-.device-card {
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 15px;
-  margin-bottom: 15px;
-  background: #f9f9f9;
-}
-
-.indicator-row {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 5px;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.device-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 15px;
+  background: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.device-row div {
+  min-width: 120px;
 }
 
 .signal-bar {
-  width: 100%;
-  height: 10px;
-  background-color: #ddd;
-  border-radius: 5px;
+  width: 100px;
+  height: 8px;
+  background-color: #ccc;
+  border-radius: 4px;
   overflow: hidden;
 }
 
 .signal-fill {
   height: 100%;
-  background-color: green;
+  background-color: #28a745;
+}
+
+button {
+  padding: 6px 10px;
+  margin-left: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.delete-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #b02a37;
+}
+
+input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
 }
