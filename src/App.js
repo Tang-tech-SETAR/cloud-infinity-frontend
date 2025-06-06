@@ -71,43 +71,39 @@ function App() {
     <div className="container">
       <h1>Coiler Repeaters Devices</h1>
 
-      <div className="main-layout">
-        <div className="form-container">
-          <h2>Add New Device</h2>
-          <input name="name" placeholder="Name" value={newDevice.name} onChange={handleInputChange} />
-          <input name="ip" placeholder="IP" value={newDevice.ip} onChange={handleInputChange} />
-          <input name="signal" placeholder="Signal" value={newDevice.signal} onChange={handleInputChange} />
-          <label>
-            Alarm:
-            <input type="checkbox" name="alarm" checked={newDevice.alarm} onChange={handleInputChange} />
-          </label>
-          <input name="uptime" placeholder="Uptime" value={newDevice.uptime} onChange={handleInputChange} />
-          <input name="temperature" placeholder="Temperature" value={newDevice.temperature} onChange={handleInputChange} />
-          <input name="last_seen" placeholder="Last Seen" value={newDevice.last_seen} onChange={handleInputChange} />
-          <button onClick={addDevice}>Add Device</button>
-        </div>
+      <div className="form-container">
+        <h2>Add New Device</h2>
+        <input name="name" placeholder="Name" value={newDevice.name} onChange={handleInputChange} />
+        <input name="ip" placeholder="IP" value={newDevice.ip} onChange={handleInputChange} />
+        <input name="signal" placeholder="Signal" value={newDevice.signal} onChange={handleInputChange} />
+        <label>
+          Alarm:
+          <input type="checkbox" name="alarm" checked={newDevice.alarm} onChange={handleInputChange} />
+        </label>
+        <input name="uptime" placeholder="Uptime" value={newDevice.uptime} onChange={handleInputChange} />
+        <input name="temperature" placeholder="Temperature" value={newDevice.temperature} onChange={handleInputChange} />
+        <input name="last_seen" placeholder="Last Seen" value={newDevice.last_seen} onChange={handleInputChange} />
+        <button onClick={addDevice}>Add Device</button>
+      </div>
 
-        <div className="device-list">
-          {devices.map((device) => (
-            <div key={device.id} className="device-card">
-              <h2>{device.name}</h2>
-              <div className="indicator-row"><strong>IP:</strong> {device.ip}</div>
-              <div className="indicator-row">
-                <strong>Signal:</strong> {device.signal}%
-              </div>
+      <div className="device-list-horizontal">
+        {devices.map(device => (
+          <div key={device.id} className="device-card-horizontal">
+            <h2>{device.name}</h2>
+            <div className="device-indicators">
+              <div className="indicator"><strong>IP:</strong> {device.ip}</div>
+              <div className="indicator"><strong>Signal:</strong> {device.signal}%</div>
               <div className="signal-bar">
                 <div className="signal-fill" style={{ width: `${device.signal}%` }}></div>
               </div>
-              <div className="indicator-row">
-                <strong>Alarm:</strong> {device.alarm ? '🚨 Triggered' : '✅ None'}
-              </div>
-              <div className="indicator-row"><strong>Uptime:</strong> {device.uptime}</div>
-              <div className="indicator-row"><strong>Temperature:</strong> {device.temperature}</div>
-              <div className="indicator-row"><strong>Last Seen:</strong> {device.last_seen}</div>
-              <button onClick={() => deleteDevice(device.id)} className="delete-button">Delete Device</button>
+              <div className="indicator"><strong>Alarm:</strong> {device.alarm ? '🚨 Triggered' : '✅ None'}</div>
+              <div className="indicator"><strong>Uptime:</strong> {device.uptime}</div>
+              <div className="indicator"><strong>Temperature:</strong> {device.temperature}</div>
+              <div className="indicator"><strong>Last Seen:</strong> {device.last_seen}</div>
             </div>
-          ))}
-        </div>
+            <button onClick={() => deleteDevice(device.id)} className="delete-button">Delete Device</button>
+          </div>
+        ))}
       </div>
     </div>
   );
