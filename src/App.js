@@ -1,3 +1,4 @@
+
 import './App.css';
 import React, { useState, useEffect } from 'react';
 
@@ -12,7 +13,8 @@ function App() {
     temperature: '',
     last_seen: ''
   });
-  const [editId, setEditId] = useState(null);
+  const [editingId, setEditingId] = useState(null);
+  const [editData, setEditData] = useState({ name: '', ip: '' });
 
   useEffect(() => {
     setDevices([
@@ -47,20 +49,12 @@ function App() {
     }));
   };
 
-  const addOrUpdateDevice = () => {
-    if (editId) {
-      setDevices(prev =>
-        prev.map(dev => (dev.id === editId ? { ...newDevice, id: editId } : dev))
-      );
-      setEditId(null);
-    } else {
-      const device = {
-        ...newDevice,
-        id: Date.now()
-      };
-      setDevices(prev => [...prev, device]);
-    }
-
+  const addDevice = () => {
+    const device = {
+      ...newDevice,
+      id: Date.now()
+    };
+    setDevices(prev => [...prev, device]);
     setNewDevice({
       name: '',
       ip: '',
@@ -72,34 +66,35 @@ function App() {
     });
   };
 
-  const editDevice = (device) => {
-    setNewDevice(device);
-    setEditId(device.id);
-  };
-
   const deleteDevice = (id) => {
     setDevices(prev => prev.filter(device => device.id !== id));
-    if (editId === id) {
-      setEditId(null);
-      setNewDevice({
-        name: '',
-        ip: '',
-        signal: '',
-        alarm: false,
-        uptime: '',
-        temperature: '',
-        last_seen: ''
-      });
-    }
+  };
+
+  const startEdit = (device) => {
+    setEditingId(device.id);
+    setEditData({ name: device.name, ip: device.ip });
+  };
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const saveEdit = (id) => {
+    setDevices(prev =>
+      prev.map(device =>
+        device.id === id ? { ...device, ...editData } : device
+      )
+    );
+    setEditingId(null);
   };
 
   return (
     <div className="container">
       <h1>Coiler Repeaters Devices</h1>
-
       <div className="main-layout">
         <div className="form-container">
-          <h2>{editId ? 'Edit Device' : 'Add New Device'}</h2>
+          <h2>Add New Device</h2>
           <input name="name" placeholder="Name" value={newDevice.name} onChange={handleInputChange} />
           <input name="ip" placeholder="IP" value={newDevice.ip} onChange={handleInputChange} />
           <input name="signal" placeholder="Signal" value={newDevice.signal} onChange={handleInputChange} />
@@ -110,21 +105,32 @@ function App() {
           <input name="uptime" placeholder="Uptime" value={newDevice.uptime} onChange={handleInputChange} />
           <input name="temperature" placeholder="Temperature" value={newDevice.temperature} onChange={handleInputChange} />
           <input name="last_seen" placeholder="Last Seen" value={newDevice.last_seen} onChange={handleInputChange} />
-          <button onClick={addOrUpdateDevice}>{editId ? 'Update Device' : 'Add Device'}</button>
+          <button onClick={addDevice}>Add Device</button>
         </div>
-
         <div className="device-list">
           {devices.map(device => (
-            <div key={device.id} className="device-card-horizontal">
-              <strong>{device.name}</strong>
-              <span><strong>IP:</strong> {device.ip}</span>
-              <span><strong>Signal:</strong> {device.signal}%</span>
-              <span><strong>Alarm:</strong> {device.alarm ? '🚨' : '✅'}</span>
-              <span><strong>Uptime:</strong> {device.uptime}</span>
-              <span><strong>Temp:</strong> {device.temperature}</span>
-              <span><strong>Last:</strong> {device.last_seen}</span>
-              <button onClick={() => editDevice(device)} className="edit-button">Edit</button>
-              <button onClick={() => deleteDevice(device.id)} className="delete-button">Delete</button>
+            <div key={device.id} className="device-card">
+              {editingId === device.id ? (
+                <>
+                  <input name="name" value={editData.name} onChange={handleEditChange} />
+                  <input name="ip" value={editData.ip} onChange={handleEditChange} />
+                  <button onClick={() => saveEdit(device.id)}>Save</button>
+                  <button onClick={() => setEditingId(null)}>Cancel</button>
+                </>
+              ) : (
+                <>
+                  <h2>{device.name}</h2>
+                  <div className="indicator-row"><strong>IP:</strong> {device.ip}</div>
+                  <div className="indicator-row"><strong>Signal:</strong> {device.signal}%</div>
+                  <div className="signal-bar"><div className="signal-fill" style={{ width: `${device.signal}%` }}></div></div>
+                  <div className="indicator-row"><strong>Alarm:</strong> {device.alarm ? '🚨 Triggered' : '✅ None'}</div>
+                  <div className="indicator-row"><strong>Uptime:</strong> {device.uptime}</div>
+                  <div className="indicator-row"><strong>Temperature:</strong> {device.temperature}</div>
+                  <div className="indicator-row"><strong>Last Seen:</strong> {device.last_seen}</div>
+                  <button onClick={() => startEdit(device)}>Edit</button>
+                  <button onClick={() => deleteDevice(device.id)} className="delete-button">Delete Device</button>
+                </>
+              )}
             </div>
           ))}
         </div>
