@@ -3,9 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "https://cloud-infinity-frontend.onrender.com",
-
-
   "dependencies": {
+    "@supabase/supabase-js": "^2.50.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1"

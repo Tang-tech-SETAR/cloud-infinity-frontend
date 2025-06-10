@@ -1,57 +1,40 @@
-// App.js
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+import { supabase } from './supabaseClient';
 
 function App() {
   const [devices, setDevices] = useState([]);
-  const [newDevice, setNewDevice] = useState({
+  const [formData, setFormData] = useState({
     name: '', ip: '', signal: '', alarm: false, uptime: '', temperature: '', last_seen: ''
   });
-  const [editingId, setEditingId] = useState(null);
-  const [editData, setEditData] = useState({ name: '', ip: '' });
-  const [darkMode, setDarkMode] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
 
   useEffect(() => {
-    setDevices([
-      { id: 1, name: 'Repeater 1', ip: '192.168.1.100', signal: 70, alarm: false, uptime: '10d 03h', temperature: '32°C', last_seen: '2025-06-04 09:28:55' },
-      { id: 2, name: 'Repeater 2', ip: '192.168.1.101', signal: 55, alarm: true, uptime: '5d 12h', temperature: '37°C', last_seen: '2025-06-04 09:28:55' }
-    ]);
+    fetchDevices();
   }, []);
 
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setNewDevice(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
-  };
+  async function fetchDevices() {
+    const { data, error } = await supabase.from('Devices').select('*').order('created_at', { ascending: false });
+    if (error) console.error('Fetch error:', error);
+    else setDevices(data);
+  }
 
-  const addDevice = () => {
-    const device = { ...newDevice, id: Date.now() };
-    setDevices(prev => [...prev, device]);
-    setNewDevice({ name: '', ip: '', signal: '', alarm: false, uptime: '', temperature: '', last_seen: '' });
-  };
+  async function addSite() {
+    const { error } = await supabase.from('Devices').insert([formData]);
+    if (error) console.error('Insert error:', error);
+    else {
+      setFormData({ name: '', ip: '', signal: '', alarm: false, uptime: '', temperature: '', last_seen: '' });
+      fetchDevices();
+    }
+  }
 
-  const deleteDevice = (id) => {
-    setDevices(prev => prev.filter(device => device.id !== id));
-  };
-
-  const startEdit = (device) => {
-    setEditingId(device.id);
-    setEditData({ name: device.name, ip: device.ip });
-  };
-
-  const handleEditChange = (e) => {
-    const { name, value } = e.target;
-    setEditData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const saveEdit = (id) => {
-    setDevices(prev =>
-      prev.map(device =>
-        device.id === id ? { ...device, ...editData } : device
-      )
-    );
-    setEditingId(null);
-  };
+  async function confirmDeleteDevice() {
+    const { error } = await supabase.from('Devices').delete().eq('id', confirmDeleteId);
+    if (error) console.error('Delete error:', error);
+    else fetchDevices();
+    setConfirmDeleteId(null);
+  }
 
   const filteredDevices = devices.filter(device =>
     device.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -59,76 +42,71 @@ function App() {
   );
 
   return (
-    <div className={darkMode ? 'container dark-mode' : 'container'}>
-      <button className="toggle-button" onClick={() => setDarkMode(prev => !prev)}>
-        Toggle Dark Mode
-      </button>
-
-      <h1>Coiler Repeaters Devices</h1>
+    <div className="container">
+      <h1>Device Monitor</h1>
 
       <div className="form-container">
-        <h2>Add New Device</h2>
-        <input name="name" placeholder="Name" value={newDevice.name} onChange={handleInputChange} />
-        <input name="ip" placeholder="IP" value={newDevice.ip} onChange={handleInputChange} />
-        <input name="signal" placeholder="Signal" value={newDevice.signal} onChange={handleInputChange} />
-        <label>Alarm: <input type="checkbox" name="alarm" checked={newDevice.alarm} onChange={handleInputChange} /></label>
-        <input name="uptime" placeholder="Uptime" value={newDevice.uptime} onChange={handleInputChange} />
-        <input name="temperature" placeholder="Temperature" value={newDevice.temperature} onChange={handleInputChange} />
-        <input name="last_seen" placeholder="Last Seen" value={newDevice.last_seen} onChange={handleInputChange} />
+        <input placeholder="Name" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} />
+        <input placeholder="IP" value={formData.ip} onChange={e => setFormData({ ...formData, ip: e.target.value })} />
+        <input placeholder="Signal" value={formData.signal} onChange={e => setFormData({ ...formData, signal: e.target.value })} />
+        <label>Alarm <input type="checkbox" checked={formData.alarm} onChange={e => setFormData({ ...formData, alarm: e.target.checked })} /></label>
+        <input placeholder="Uptime" value={formData.uptime} onChange={e => setFormData({ ...formData, uptime: e.target.value })} />
+        <input placeholder="Temp" value={formData.temperature} onChange={e => setFormData({ ...formData, temperature: e.target.value })} />
+        <input placeholder="Last Seen" value={formData.last_seen} onChange={e => setFormData({ ...formData, last_seen: e.target.value })} />
         <button onClick={addDevice}>Add Device</button>
       </div>
 
-      <div className="search-container">
-  <input
-    type="text"
-    placeholder="Search by name or IP"
-    value={searchQuery}
-    onChange={(e) => setSearchQuery(e.target.value)}
-    className="search-input"
-  />
-  <button className="search-button" onClick={() => {}}>
-    Search
-  </button>
-</div>
+      <input
+        type="text"
+        placeholder="Search by name or IP"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
 
+      <table className="device-table">
+        <thead>
+          <tr>
+            <th>Site Name</th>
+            <th>IP</th>
+            <th>Signal</th>
+            <th>Alarm</th>
+            <th>Uptime</th>
+            <th>Temp</th>
+            <th>Last Seen</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredDevices.length === 0 ? (
+            <tr><td colSpan="8">No devices found.</td></tr>
+          ) : (
+            filteredDevices.map(device => (
+              <tr key={device.id}>
+                <td>{device.name}</td>
+                <td>{device.ip}</td>
+                <td>{device.signal}%</td>
+                <td>{device.alarm ? '🔔 Triggered' : '✅ None'}</td>
+                <td>{device.uptime}</td>
+                <td>{device.temperature}</td>
+                <td>{device.last_seen}</td>
+                <td>
+                  <button onClick={() => setConfirmDeleteId(device.id)}>Delete</button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
 
-      <div className="device-list">
-        {filteredDevices.length === 0 ? (
-          <p>No devices found.</p>
-        ) : (
-          filteredDevices.map(device => (
-            <div key={device.id} className="device-card">
-              {editingId === device.id ? (
-                <>
-                  <input name="name" value={editData.name} onChange={handleEditChange} />
-                  <input name="ip" value={editData.ip} onChange={handleEditChange} />
-                  <button onClick={() => saveEdit(device.id)}>Update</button>
-                  <button onClick={() => setEditingId(null)}>Cancel</button>
-                </>
-              ) : (
-                <>
-                  <div className="device-header">
-                    <strong>{device.name}</strong>
-                    <span><strong>IP:</strong> {device.ip}</span>
-                    <span><strong>Signal:</strong> {device.signal}%</span>
-                    <div className="signal-bar">
-                      <div className="signal-fill" style={{ width: `${device.signal}%` }}></div>
-                    </div>
-                    <span><strong>Alarm:</strong> {device.alarm ? '🔔 Triggered' : '✅ None'}</span>
-                    <span><strong>Uptime:</strong> {device.uptime}</span>
-                    <span><strong>Temp:</strong> {device.temperature}</span>
-                  </div>
-                  <div className="indicator-row">
-                    <strong>Last Seen:</strong> {device.last_seen}
-                  </div>
-                  <button className="edit-button" onClick={() => startEdit(device)}>Edit</button>
-                  <button className="delete-button" onClick={() => deleteDevice(device.id)}>Delete</button>
-                </>
-              )}
-            </div>
-          ))
-        )}
-      </div>
+      {confirmDeleteId !== null && (
+        <div className="modal">
+          <div className="modal-content">
+            <p>Are you sure you want to delete this device?</p>
+            <button onClick={confirmDeleteDevice}>Yes, Delete</button>
+            <button onClick={() => setConfirmDeleteId(null)}>Cancel</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
