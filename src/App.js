@@ -15,16 +15,22 @@ function App() {
   }, []);
 
   async function fetchDevices() {
-    const { data, error } = await supabase.from('Devices').select('*').order('created_at', { ascending: false });
+    const { data, error } = await supabase
+      .from('Devices')
+      .select('*')
+      .order('created_at', { ascending: false });
+
     if (error) console.error('Fetch error:', error);
     else setDevices(data);
   }
 
-  async function addSite() {
+  async function addDevice() {
     const { error } = await supabase.from('Devices').insert([formData]);
     if (error) console.error('Insert error:', error);
     else {
-      setFormData({ name: '', ip: '', signal: '', alarm: false, uptime: '', temperature: '', last_seen: '' });
+      setFormData({
+        name: '', ip: '', signal: '', alarm: false, uptime: '', temperature: '', last_seen: ''
+      });
       fetchDevices();
     }
   }
@@ -110,8 +116,5 @@ function App() {
     </div>
   );
 }
-
-// Trigger redeploy
-
 
 export default App;
