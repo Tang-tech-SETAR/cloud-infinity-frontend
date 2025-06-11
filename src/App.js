@@ -16,7 +16,7 @@ function App() {
 
   async function fetchDevices() {
     const { data, error } = await supabase
-      .from('Devices')
+      .from('Sites')
       .select('*')
       .order('created_at', { ascending: false });
 
@@ -24,10 +24,12 @@ function App() {
     else setDevices(data);
   }
 
-  async function addDevice() {
-    const { error } = await supabase.from('Devices').insert([formData]);
-    if (error) console.error('Insert error:', error);
-    else {
+  async function addSite() {
+    const { error } = await supabase.from('Sites').insert([formData]);
+    if (error) {
+      console.error('Insert error:', error);
+      alert('Failed to add site: ' + error.message);
+    } else {
       setFormData({
         name: '', ip: '', signal: '', alarm: false, uptime: '', temperature: '', last_seen: ''
       });
@@ -36,7 +38,7 @@ function App() {
   }
 
   async function confirmDeleteDevice() {
-    const { error } = await supabase.from('Devices').delete().eq('id', confirmDeleteId);
+    const { error } = await supabase.from('Sites').delete().eq('id', confirmDeleteId);
     if (error) console.error('Delete error:', error);
     else fetchDevices();
     setConfirmDeleteId(null);
@@ -59,9 +61,7 @@ function App() {
         <input placeholder="Uptime" value={formData.uptime} onChange={e => setFormData({ ...formData, uptime: e.target.value })} />
         <input placeholder="Temp" value={formData.temperature} onChange={e => setFormData({ ...formData, temperature: e.target.value })} />
         <input placeholder="Last Seen" value={formData.last_seen} onChange={e => setFormData({ ...formData, last_seen: e.target.value })} />
-        
-        {/* ✅ Corrected the button to use the defined function */}
-        <button onClick={addDevice}>Add Site</button>
+        <button onClick={addSite}>Add Site</button>
       </div>
 
       <input
@@ -109,7 +109,7 @@ function App() {
       {confirmDeleteId !== null && (
         <div className="modal">
           <div className="modal-content">
-            <p>Are you sure you want to delete this device?</p>
+            <p>Are you sure you want to delete this site?</p>
             <button onClick={confirmDeleteDevice}>Yes, Delete</button>
             <button onClick={() => setConfirmDeleteId(null)}>Cancel</button>
           </div>
