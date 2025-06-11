@@ -59,8 +59,9 @@ function App() {
         <input placeholder="Uptime" value={formData.uptime} onChange={e => setFormData({ ...formData, uptime: e.target.value })} />
         <input placeholder="Temp" value={formData.temperature} onChange={e => setFormData({ ...formData, temperature: e.target.value })} />
         <input placeholder="Last Seen" value={formData.last_seen} onChange={e => setFormData({ ...formData, last_seen: e.target.value })} />
-        <button onClick={addSite}>Add Site</button>
-
+        
+        {/* ✅ Corrected the button to use the defined function */}
+        <button onClick={addDevice}>Add Site</button>
       </div>
 
       <input
