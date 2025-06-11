@@ -5,13 +5,7 @@ import { supabase } from './supabaseClient';
 function App() {
   const [devices, setDevices] = useState([]);
   const [formData, setFormData] = useState({
-    site_name: '',
-    ip: '',
-    signal: '',
-    alarm: false,
-    uptime: '',
-    temperature: '',
-    last_seen: ''
+    site_name: '', ip: '', signal: '', alarm: false, uptime: '', temperature: '', last_seen: ''
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
@@ -34,19 +28,21 @@ function App() {
   }
 
   async function addSite() {
-    const { error } = await supabase.from('Sites').insert([formData]);
+    const payload = { ...formData };
+
+    // Remove empty string values (optional cleanup)
+    Object.keys(payload).forEach(key => {
+      if (payload[key] === '') delete payload[key];
+    });
+
+    const { error } = await supabase.from('Sites').insert([payload]);
+
     if (error) {
       console.error('Insert error:', error);
-      alert('Failed to add site: ' + (error.message || 'Unknown error'));
+      alert('Failed to add site: ' + error.message);
     } else {
       setFormData({
-        site_name: '',
-        ip: '',
-        signal: '',
-        alarm: false,
-        uptime: '',
-        temperature: '',
-        last_seen: ''
+        site_name: '', ip: '', signal: '', alarm: false, uptime: '', temperature: '', last_seen: ''
       });
       fetchDevices();
     }
@@ -54,17 +50,14 @@ function App() {
 
   async function confirmDeleteDevice() {
     const { error } = await supabase.from('Sites').delete().eq('id', confirmDeleteId);
-    if (error) {
-      console.error('Delete error:', error);
-    } else {
-      fetchDevices();
-    }
+    if (error) console.error('Delete error:', error);
+    else fetchDevices();
     setConfirmDeleteId(null);
   }
 
   const filteredDevices = devices.filter(device =>
-    device.site_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    device.ip.includes(searchQuery)
+    (device.site_name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (device.ip || '').includes(searchQuery)
   );
 
   return (
@@ -72,44 +65,15 @@ function App() {
       <h1>Device Monitor</h1>
 
       <div className="form-container">
-        <input
-          placeholder="Site Name"
-          value={formData.site_name}
-          onChange={e => setFormData({ ...formData, site_name: e.target.value })}
-        />
-        <input
-          placeholder="IP"
-          value={formData.ip}
-          onChange={e => setFormData({ ...formData, ip: e.target.value })}
-        />
-        <input
-          placeholder="Signal"
-          value={formData.signal}
-          onChange={e => setFormData({ ...formData, signal: e.target.value })}
-        />
+        <input placeholder="Name" value={formData.site_name} onChange={e => setFormData({ ...formData, site_name: e.target.value })} />
+        <input placeholder="IP" value={formData.ip} onChange={e => setFormData({ ...formData, ip: e.target.value })} />
+        <input placeholder="Signal" value={formData.signal} onChange={e => setFormData({ ...formData, signal: e.target.value })} />
         <label>
-          Alarm
-          <input
-            type="checkbox"
-            checked={formData.alarm}
-            onChange={e => setFormData({ ...formData, alarm: e.target.checked })}
-          />
+          Alarm <input type="checkbox" checked={formData.alarm} onChange={e => setFormData({ ...formData, alarm: e.target.checked })} />
         </label>
-        <input
-          placeholder="Uptime"
-          value={formData.uptime}
-          onChange={e => setFormData({ ...formData, uptime: e.target.value })}
-        />
-        <input
-          placeholder="Temp"
-          value={formData.temperature}
-          onChange={e => setFormData({ ...formData, temperature: e.target.value })}
-        />
-        <input
-          placeholder="Last Seen"
-          value={formData.last_seen}
-          onChange={e => setFormData({ ...formData, last_seen: e.target.value })}
-        />
+        <input placeholder="Uptime" value={formData.uptime} onChange={e => setFormData({ ...formData, uptime: e.target.value })} />
+        <input placeholder="Temp" value={formData.temperature} onChange={e => setFormData({ ...formData, temperature: e.target.value })} />
+        <input placeholder="Last Seen" value={formData.last_seen} onChange={e => setFormData({ ...formData, last_seen: e.target.value })} />
         <button onClick={addSite}>Add Site</button>
       </div>
 
@@ -117,7 +81,7 @@ function App() {
         type="text"
         placeholder="Search by name or IP"
         value={searchQuery}
-        onChange={e => setSearchQuery(e.target.value)}
+        onChange={(e) => setSearchQuery(e.target.value)}
       />
 
       <table className="device-table">
@@ -135,9 +99,7 @@ function App() {
         </thead>
         <tbody>
           {filteredDevices.length === 0 ? (
-            <tr>
-              <td colSpan="8">No devices found.</td>
-            </tr>
+            <tr><td colSpan="8">No devices found.</td></tr>
           ) : (
             filteredDevices.map(device => (
               <tr key={device.id}>
